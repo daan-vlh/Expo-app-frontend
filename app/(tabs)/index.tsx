@@ -58,9 +58,19 @@ export default function HomeScreen() {
           style={{
             color: "white",
             textDecorationLine: "underline",
+            marginBottom: 20,
           }}
         >
-          Go to login page
+          Go to settings page
+        </Link>
+        <Link
+          href={"../camera-test"}
+          style={{
+            color: "white",
+            textDecorationLine: "underline",
+          }}
+        >
+          Go to camera page
         </Link>
         {isLoading && <ThemedText>Loading...</ThemedText>}
         {error && <ThemedText>Error loading data</ThemedText>}
