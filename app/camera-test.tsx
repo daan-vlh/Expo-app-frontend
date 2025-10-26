@@ -8,6 +8,9 @@ import {
   useCameraPermissions,
 } from "expo-camera";
 import { Image } from "expo-image";
+import * as ImageManipulator from "expo-image-manipulator";
+import * as MediaLibrary from "expo-media-library";
+
 import { useRef, useState } from "react";
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -36,7 +39,22 @@ export default function App() {
 
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
-    if (photo?.uri) setUri(photo.uri);
+    if (photo?.uri) {
+      let finalUri = photo.uri;
+      if (facing === "front") {
+        try {
+          const flipped = await ImageManipulator.manipulateAsync(
+            photo.uri,
+            [{ flip: ImageManipulator.FlipType.Horizontal }],
+            { format: ImageManipulator.SaveFormat.JPEG }
+          );
+          finalUri = flipped.uri;
+        } catch (e) {
+          console.warn("Image flip failed", e);
+        }
+      }
+      setUri(finalUri);
+    }
   };
 
   const recordVideo = async () => {
@@ -59,6 +77,20 @@ export default function App() {
   };
 
   const renderPicture = (uri: string) => {
+    const saveToCameraRoll = async () => {
+      const { status } = await MediaLibrary.requestPermissionsAsync();
+      if (status !== "granted") {
+        alert("Permission to access camera roll is required.");
+        return;
+      }
+      try {
+        await MediaLibrary.saveToLibraryAsync(uri);
+        alert("Saved to camera roll");
+      } catch (e) {
+        alert("Save failed");
+      }
+    };
+
     return (
       <View>
         <Image
@@ -67,6 +99,7 @@ export default function App() {
           style={{ width: 300, aspectRatio: 1 }}
         />
         <Button onPress={() => setUri(null)} title="Take another picture" />
+        <Button onPress={saveToCameraRoll} title="Save to camera roll" />
       </View>
     );
   };

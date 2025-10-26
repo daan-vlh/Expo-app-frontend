@@ -37,6 +37,15 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="textpage"
+        options={{
+          title: "Text",
+          tabBarIcon: ({ color }) => (
+            <MaterialIcons name="network-wifi" size={28} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

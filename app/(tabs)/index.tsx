@@ -4,29 +4,17 @@ import { StyleSheet } from "react-native";
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import {
-  InstrumentSerif_400Regular,
-  useFonts,
-} from "@expo-google-fonts/instrument-serif";
 import { Link } from "expo-router";
 import useSWR from "swr";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 export default function HomeScreen() {
-  const [fontsLoaded] = useFonts({
-    InstrumentSerif_400Regular,
-  });
-
   // Basic SWR usage
   const { data, error, isLoading } = useSWR(
     "https://data-app-bs97.onrender.com/messages",
     fetcher
   );
-
-  if (!fontsLoaded) {
-    return null; // or a loading indicator
-  }
 
   return (
     <ParallaxScrollView
@@ -42,6 +30,32 @@ export default function HomeScreen() {
         <ThemedText style={{ color: "#5fb6fdff" }} type="subtitle">
           Mango
         </ThemedText>
+        <Link href="/modal">
+          <Link.Trigger>
+            <ThemedText type="subtitle">Open modal</ThemedText>
+          </Link.Trigger>
+          <Link.Preview />
+          <Link.Menu>
+            <Link.MenuAction
+              title="Action"
+              icon="cube"
+              onPress={() => alert("Action pressed")}
+            />
+            <Link.MenuAction
+              title="Share"
+              icon="square.and.arrow.up"
+              onPress={() => alert("Share pressed")}
+            />
+            <Link.Menu title="More" icon="ellipsis">
+              <Link.MenuAction
+                title="Delete"
+                icon="trash"
+                destructive
+                onPress={() => alert("Delete pressed")}
+              />
+            </Link.Menu>
+          </Link.Menu>
+        </Link>
       </ThemedView>
       <ThemedView>
         <Image
@@ -61,7 +75,7 @@ export default function HomeScreen() {
             marginBottom: 20,
           }}
         >
-          Go to settings page
+          Go to camera page
         </Link>
         <Link
           href={"../camera-test"}
@@ -70,7 +84,7 @@ export default function HomeScreen() {
             textDecorationLine: "underline",
           }}
         >
-          Go to camera page
+          Go to another camera page
         </Link>
         {isLoading && <ThemedText>Loading...</ThemedText>}
         {error && <ThemedText>Error loading data</ThemedText>}
