@@ -16,16 +16,19 @@ export default function TabTwoScreen() {
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={styles.container}>
         <ThemedText type="title">Title</ThemedText>
+        <ThemedText>
+          This app includes example code to help you get started.
+        </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: "row",
+  container: {
+    flexDirection: "column",
     justifyContent: "center",
     gap: 8,
   },

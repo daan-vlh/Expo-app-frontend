@@ -14,7 +14,7 @@ import * as MediaLibrary from "expo-media-library";
 import { useRef, useState } from "react";
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function App() {
+export default function TabTwoScreen() {
   const [permission, requestPermission] = useCameraPermissions();
   const ref = useRef<CameraView>(null);
   const [uri, setUri] = useState<string | null>(null);

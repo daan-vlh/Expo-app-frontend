@@ -23,6 +23,10 @@ export default function RootLayout() {
         <Stack.Screen name="settings" options={{ title: "settings" }} />
         <Stack.Screen name="camera-test" options={{ title: "camera-test" }} />
         <Stack.Screen
+          name="camera-simple"
+          options={{ title: "camera-simple" }}
+        />
+        <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}
         />

@@ -1,20 +1,17 @@
 import { Image } from "expo-image";
+import { Link } from "expo-router";
+
 import { StyleSheet } from "react-native";
 
 import ParallaxScrollView from "@/components/parallax-scroll-view";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { Link } from "expo-router";
-import useSWR from "swr";
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import useMessages from "@/data/messages";
 
 export default function HomeScreen() {
-  // Basic SWR usage
-  const { data, error, isLoading } = useSWR(
-    "https://data-app-bs97.onrender.com/messages",
-    fetcher
-  );
+  const { data, error, isLoading } = useMessages();
+  console.log(data);
 
   return (
     <ParallaxScrollView
@@ -65,10 +62,10 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText style={{ marginBottom: 8 }} type="title">
-          SWR Data Fetching
+          Stack navigation
         </ThemedText>
         <Link
-          href={"../settings"}
+          href={"../camera-simple"}
           style={{
             color: "white",
             textDecorationLine: "underline",
@@ -82,35 +79,53 @@ export default function HomeScreen() {
           style={{
             color: "white",
             textDecorationLine: "underline",
+            marginBottom: 20,
           }}
         >
           Go to another camera page
         </Link>
-        {isLoading && <ThemedText>Loading...</ThemedText>}
-        {error && <ThemedText>Error loading data</ThemedText>}
-        {Array.isArray(data) &&
-          data.length > 0 &&
-          data.map((message, idx) => {
-            return (
-              <ThemedView
-                key={message._id ?? idx}
-                style={{
-                  marginBottom: 10,
-                  backgroundColor: "#ffffff1a",
-                  padding: 10,
-                  borderRadius: 5,
-                }}
-              >
-                <ThemedText>{message.text}</ThemedText>
-                <ThemedText style={{ fontSize: 14, fontStyle: "italic" }}>
-                  Sender: {message.sender.username}
-                </ThemedText>
-                <ThemedText style={{ fontSize: 14, color: "#888" }}>
-                  Date: {new Date(message.createdAt).toLocaleString()}{" "}
-                </ThemedText>
-              </ThemedView>
-            );
-          })}
+        <Link
+          href={"../settings"}
+          style={{
+            color: "white",
+            textDecorationLine: "underline",
+            marginBottom: 20,
+          }}
+        >
+          Go to settings page
+        </Link>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText style={{ marginBottom: 8 }} type="title">
+          SWR Data Fetching
+        </ThemedText>
+        <ThemedView>
+          {isLoading && <ThemedText>Loading...</ThemedText>}
+          {error && <ThemedText>Error loading data</ThemedText>}
+          {Array.isArray(data) &&
+            data.length > 0 &&
+            data.map((message, idx) => {
+              return (
+                <ThemedView
+                  key={message._id ?? idx}
+                  style={{
+                    marginBottom: 10,
+                    backgroundColor: "#ffffff1a",
+                    padding: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <ThemedText>{message.text}</ThemedText>
+                  <ThemedText style={{ fontSize: 14, fontStyle: "italic" }}>
+                    Sender: {message.sender.username}
+                  </ThemedText>
+                  <ThemedText style={{ fontSize: 14, color: "#888" }}>
+                    Date: {new Date(message.createdAt).toLocaleString()}{" "}
+                  </ThemedText>
+                </ThemedView>
+              );
+            })}
+        </ThemedView>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -121,6 +136,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  container: {
+    flexDirection: "column",
+    gap: 8,
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   stepContainer: {
     gap: 8,
