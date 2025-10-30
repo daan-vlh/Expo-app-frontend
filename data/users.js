@@ -5,5 +5,5 @@ import fetcher from "./_fetcher";
 export default function useUsers() {
   const { data, error, isLoading } = useSWR(`${API_URL}/users`, fetcher);
 
-  return { data, isError: error, isLoading };
+  return { data, error, isLoading };
 }
